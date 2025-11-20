@@ -55,3 +55,4 @@ A simple CLI application to schedule jobs, run tasks, use recurrence rules, prev
 <!-- update at 2025-11-16 00:00:00 -->
 <!-- update at 2025-11-17 00:00:00 -->
 <!-- update at 2025-11-19 00:00:00 -->
+<!-- update at 2025-11-20 00:00:00 -->
