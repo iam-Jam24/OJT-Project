@@ -1,0 +1,116 @@
+[
+    {
+        "name": "test_sound",
+        "command": "echo task",
+        "rule": {
+            "frequency": "interval",
+            "seconds": 5
+        },
+        "next_run": "2025-12-01T12:46:29.106176",
+        "running": true
+    },
+    {
+        "name": "jamal",
+        "command": "echo task",
+        "rule": {
+            "frequency": "daily",
+            "time": "2025-12-01T14:15:00"
+        },
+        "next_run": "2025-12-02T14:15:00",
+        "running": false
+    },
+    {
+        "name": "jamal",
+        "command": "echo task",
+        "rule": {
+            "frequency": "daily",
+            "time": "2025-12-01T02:16:00"
+        },
+        "next_run": "2025-12-02T02:16:00",
+        "running": false
+    },
+    {
+        "name": "job_name",
+        "command": "echo task",
+        "rule": {
+            "frequency": "once",
+            "time": "2025-12-01T14:18:00"
+        },
+        "next_run": "2025-12-01T14:18:00",
+        "running": false
+    },
+    {
+        "name": "morning_task",
+        "command": "echo task",
+        "rule": {
+            "frequency": "daily",
+            "time": "2025-12-02T06:00:00"
+        },
+        "next_run": "2025-12-02T06:00:00"
+    },
+    {
+        "name": "weekly_report",
+        "command": "echo task",
+        "rule": {
+            "frequency": "weekly",
+            "time": "2025-12-05T17:00:00"
+        },
+        "next_run": "2025-12-05T17:00:00"
+    },
+    {
+        "name": "monitor",
+        "command": "echo task",
+        "rule": {
+            "frequency": "interval",
+            "seconds": 30
+        },
+        "next_run": "2025-12-01T14:25:15.487136",
+        "running": true
+    },
+    {
+        "name": "special_event",
+        "command": "echo task",
+        "rule": {
+            "frequency": "once",
+            "time": "2025-12-25T12:00:00"
+        },
+        "next_run": "2025-12-25T12:00:00"
+    },
+    {
+        "name": "morning_task",
+        "command": "Jamal",
+        "rule": {
+            "frequency": "daily",
+            "time": "2025-12-02T06:00:00"
+        },
+        "next_run": "2025-12-02T06:00:00"
+    },
+    {
+        "name": "weekly_report",
+        "command": "echo task",
+        "rule": {
+            "frequency": "weekly",
+            "time": "2025-12-05T17:00:00"
+        },
+        "next_run": "2025-12-05T17:00:00"
+    },
+    {
+        "name": "monitor",
+        "command": "echo task",
+        "rule": {
+            "frequency": "interval",
+            "seconds": 30
+        },
+        "next_run": "2025-12-01T16:01:40.507952",
+        "running": false
+    },
+    {
+        "name": "special_event",
+        "command": "echo task",
+        "rule": {
+            "frequency": "once",
+            "time": "2025-12-25T12:00:00"
+        },
+        "next_run": "2025-12-25T12:00:00"
+    }
+]
