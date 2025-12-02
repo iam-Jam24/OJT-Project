@@ -10,6 +10,7 @@ class JobRunner:
         self.jobs = jobs
         self.running = True
         self.lock = threading.Lock()
+        self.worker_threads = []
 
     def run_job(self, job):
         print(f"\n▶ Running job: {job['name']}")
@@ -32,7 +33,8 @@ class JobRunner:
 
                     if t >= next_time and not job.get("running", False):
                         job["running"] = True
-                        thread = threading.Thread(target=self.execute_and_reschedule, args=(job,))
+                        thread = threading.Thread(target=self.execute_and_reschedule, args=(job,), daemon=False)
+                        self.worker_threads.append(thread)
                         thread.start()
             time.sleep(1)
 
@@ -52,3 +54,7 @@ class JobRunner:
     def stop(self):
         print("Shutting down scheduler...")
         self.running = False
+        # Wait for all worker threads to complete
+        for thread in self.worker_threads:
+            if thread.is_alive():
+                thread.join(timeout=5)

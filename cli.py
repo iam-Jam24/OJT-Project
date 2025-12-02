@@ -25,19 +25,38 @@ if args.command == "add":
     rule = {"frequency": args.freq}
 
     if args.freq == "interval":
+        if not args.seconds:
+            print("Error: --seconds is required for interval jobs")
+            exit(1)
         rule["seconds"] = args.seconds
     else:
+        if not args.time:
+            print(f"Error: --time is required for {args.freq} jobs (format: HH:MM)")
+            exit(1)
         rule["time"] = args.time
 
-    engine.add_job(args.name, "echo task", rule)
-    print("Job added successfully.")
+    try:
+        engine.add_job(args.name, "echo task", rule)
+        print("Job added successfully.")
+    except Exception as e:
+        print(f"Error adding job: {e}")
+        exit(1)
 
 elif args.command == "list":
-    for job in engine.list_jobs():
-        print(f"- {job['name']} | next run: {job['next_run']}")
+    jobs = engine.list_jobs()
+    if not jobs:
+        print("No jobs scheduled.")
+    else:
+        for job in jobs:
+            print(f"- {job['name']} | next run: {job['next_run']}")
 
 elif args.command == "start":
+    print("Starting scheduler... (Ctrl+C to stop)")
     try:
         engine.start()
+        import time
+        while True:
+            time.sleep(1)
     except KeyboardInterrupt:
+        print("\nShutting down...")
         engine.stop()

@@ -13,7 +13,15 @@ class SchedulerEngine:
         self.thread = None
 
     def add_job(self, name, command, rule):
-        first_run = now() if rule["frequency"] == "interval" else parse_time(rule["time"])
+        if rule["frequency"] == "interval":
+            first_run = now()
+        else:
+            # Handle HH:MM format by converting to today's date
+            time_str = rule.get("time", "00:00")
+            if "T" not in time_str:  # HH:MM format
+                today = now().date()
+                time_str = f"{today}T{time_str}:00"
+            first_run = parse_time(time_str)
 
         job = {
             "name": name,
