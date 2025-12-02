@@ -3,7 +3,7 @@ import time
 from scheduler.recurrence import next_run_time
 from scheduler.job_store import save_jobs
 from scheduler.utils import now, parse_time
-from scheduler.notifications import notify_job_execution, notify_job_completed
+from scheduler.notifications import notify_job_execution, notify_job_completed, notify_alarm_ringing
 
 class JobRunner:
     def __init__(self, jobs):
@@ -15,8 +15,8 @@ class JobRunner:
     def run_job(self, job):
         print(f"\n▶ Running job: {job['name']}")
         
-        # Trigger notification with sound and pop-up
-        notify_job_execution(job['name'], with_sound=True, with_popup=True)
+        # Trigger comprehensive alarm notification with alert dialog, sound, and popup
+        notify_alarm_ringing(job['name'], duration=3)
 
         # simulate job execution
         time.sleep(2)

@@ -178,3 +178,75 @@ def notify_job_completed(job_name, next_run_time):
         daemon=True
     )
     sound_thread.start()
+
+
+def show_alert_dialog(job_name, message=""):
+    """
+    Show an alert dialog box during alarm execution (macOS specific).
+    Falls back to terminal display on other systems.
+    
+    Args:
+        job_name (str): Name of the job triggering the alert
+        message (str): Additional alert message
+    """
+    try:
+        if sys.platform == "darwin":  # macOS
+            # Create an interactive alert dialog
+            alert_text = f"🚨 ALARM: {job_name}"
+            if message:
+                alert_text += f"\n\n{message}"
+            
+            safe_text = alert_text.replace('"', '\\"').replace("'", "\\'")
+            
+            # Use AppleScript to show an alert dialog
+            script = f'''
+            tell application "System Events"
+                display alert "{job_name}" message "{message}" buttons {{"Dismiss", "Snooze"}} default button 1 with icon caution
+            end tell
+            '''
+            os.system(f"osascript -e '{script}' > /dev/null 2>&1 &")
+        else:
+            # Fallback for Windows/Linux
+            print(f"\n🚨 ALERT: {job_name}")
+            if message:
+                print(f"   {message}")
+    except Exception as e:
+        print(f"\n🚨 ALERT: {job_name}")
+        if message:
+            print(f"   {message}")
+
+
+def notify_alarm_ringing(job_name, duration=5):
+    """
+    Comprehensive alarm notification with sound, visual alert, and popup.
+    Called when an alarm job is triggered.
+    
+    Args:
+        job_name (str): Name of the alarm job
+        duration (int): Duration to play alarm sound (seconds)
+    """
+    print(f"\n🔔🔔🔔 ALARM RINGING: {job_name} 🔔🔔🔔")
+    
+    # Show alert dialog in background thread
+    alert_thread = threading.Thread(
+        target=show_alert_dialog,
+        args=(job_name, "Your scheduled alarm has been triggered!"),
+        daemon=True
+    )
+    alert_thread.start()
+    
+    # Play alarm sound in background thread
+    alarm_thread = threading.Thread(
+        target=play_alarm_sound,
+        args=(duration,),
+        daemon=True
+    )
+    alarm_thread.start()
+    
+    # Show popup notification
+    popup_thread = threading.Thread(
+        target=show_popup_notification,
+        args=(f"⏰ {job_name}", "Alarm is ringing!", duration),
+        daemon=True
+    )
+    popup_thread.start()
