@@ -9,13 +9,13 @@
         "next_run": "2025-12-02T14:30:00"
     },
     {
-        "name": "Quick Check",
+        "name": "Demo Run",
         "command": "echo task",
         "rule": {
             "frequency": "interval",
             "seconds": 3
         },
-        "next_run": "2025-12-02T08:02:43.459733",
+        "next_run": "2025-12-02T08:09:22.459733",
         "running": false
     }
 ]
