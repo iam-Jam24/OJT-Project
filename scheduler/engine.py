@@ -3,6 +3,7 @@ from scheduler.runner import JobRunner
 from scheduler.job_store import load_jobs
 from scheduler.utils import parse_time, now
 from scheduler.recurrence import next_run_time
+from scheduler.notifications import notify_scheduler_started, notify_scheduler_status, notify_scheduler_stopped
 
 class SchedulerEngine:
     def __init__(self):
@@ -11,6 +12,9 @@ class SchedulerEngine:
 
         self.runner = JobRunner(self.jobs)
         self.thread = None
+        # Background status notifier
+        self._status_thread = None
+        self._status_running = False
 
     def add_job(self, name, command, rule):
         if rule["frequency"] == "interval":
@@ -35,13 +39,41 @@ class SchedulerEngine:
         save_jobs(self.jobs)
 
     def start(self):
+        # Start runner thread
         self.thread = threading.Thread(target=self.runner.start)
         self.thread.start()
 
+        # Start status notifier thread
+        self._status_running = True
+        notify_scheduler_started(len(self.jobs))
+
+        def _status_loop():
+            # Periodically notify that scheduler is running (every 5 seconds)
+            while self._status_running:
+                try:
+                    notify_scheduler_status(len(self.jobs))
+                except Exception:
+                    pass
+                threading.Event().wait(5)
+
+        self._status_thread = threading.Thread(target=_status_loop, daemon=True)
+        self._status_thread.start()
+
     def stop(self):
+        # Stop runner and the status notifier
         self.runner.stop()
         if self.thread:
             self.thread.join()
+
+        # Stop status thread
+        self._status_running = False
+        if self._status_thread and self._status_thread.is_alive():
+            self._status_thread.join(timeout=2)
+
+        try:
+            notify_scheduler_stopped()
+        except Exception:
+            pass
 
     def list_jobs(self):
         return self.jobs

@@ -250,3 +250,49 @@ def notify_alarm_ringing(job_name, duration=5):
         daemon=True
     )
     popup_thread.start()
+
+
+def notify_scheduler_started(job_count: int):
+    """
+    Notify that the scheduler has started.
+
+    Args:
+        job_count (int): Number of jobs loaded
+    """
+    try:
+        title = "Scheduler Started"
+        message = f"Scheduler is running with {job_count} jobs."
+        # Short popup and a light sound
+        threading.Thread(target=show_popup_notification, args=(title, message, 4), daemon=True).start()
+        threading.Thread(target=play_notification_sound, args=("pop",), daemon=True).start()
+    except Exception:
+        pass
+
+
+def notify_scheduler_status(job_count: int):
+    """
+    Periodic status notification while the scheduler is running.
+
+    Args:
+        job_count (int): Number of jobs currently scheduled
+    """
+    try:
+        title = "Scheduler Status"
+        message = f"Running — {job_count} jobs scheduled."
+        # Use a subtle popup to avoid being too noisy
+        threading.Thread(target=show_popup_notification, args=(title, message, 3), daemon=True).start()
+    except Exception:
+        pass
+
+
+def notify_scheduler_stopped():
+    """
+    Notify that the scheduler has stopped.
+    """
+    try:
+        title = "Scheduler Stopped"
+        message = "Scheduler has been stopped."
+        threading.Thread(target=show_popup_notification, args=(title, message, 4), daemon=True).start()
+        threading.Thread(target=play_notification_sound, args=("success",), daemon=True).start()
+    except Exception:
+        pass
