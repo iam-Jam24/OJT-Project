@@ -25,7 +25,7 @@ MACOS_SOUNDS = {
     "bell": "/System/Library/Sounds/Glass.aiff",
     "notification": "/System/Library/Sounds/Ping.aiff",
     "alert": "/System/Library/Sounds/Sosumi.aiff",
-    "beep": "/System/Library/Sounds/Tink.aiff",
+    "beep": "/System/Library/Sounds/Beep.aiff",
     "pop": "/System/Library/Sounds/Pop.aiff",
     "success": "/System/Library/Sounds/Tink.aiff",
 }
@@ -73,14 +73,20 @@ def play_alarm_sound(duration=3):
     """
     try:
         if sys.platform == "darwin":  # macOS
-            # Play loud buzzer effect by repeating Sosumi and Basso
-            import time as time_mod
-            for _ in range(duration * 2):
-                os.system("afplay /System/Library/Sounds/Sosumi.aiff > /dev/null 2>&1")
-                time_mod.sleep(0.2)
-            for _ in range(duration):
-                os.system("afplay /System/Library/Sounds/Basso.aiff > /dev/null 2>&1")
-                time_mod.sleep(0.2)
+                # Play a simple double "beep beep" pattern using the system Beep sound
+                # This will play two quick beeps repeatedly for the requested duration
+                import time as time_mod
+                beep_file = MACOS_SOUNDS.get("beep", "/System/Library/Sounds/Beep.aiff")
+                # For each second, play two short beeps
+                end_time = time_mod.time() + max(0, int(duration))
+                while time_mod.time() < end_time:
+                    # first beep
+                    os.system(f"afplay {beep_file} > /dev/null 2>&1")
+                    time_mod.sleep(0.18)
+                    # second beep
+                    os.system(f"afplay {beep_file} > /dev/null 2>&1")
+                    # short pause before next pair
+                    time_mod.sleep(0.32)
         elif sys.platform == "win32":  # Windows
             # Use Windows beep
             import winsound
