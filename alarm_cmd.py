@@ -133,14 +133,18 @@ def main():
         print("\n\n" + "="*60)
         print("🔔🔔🔔 ALARM TRIGGERED! 🔔🔔🔔")
         print("="*60 + "\n")
-        
+
         notify_alarm_ringing(alarm_name, duration=5)
         show_popup_notification(
             title=f"⏰ {alarm_name}",
             message=message,
             timeout=5
         )
-        
+
+        # Play beep sound after notification
+        from scheduler.notifications import play_notification_sound
+        play_notification_sound("beep")
+
         print(f"\n✓ Alarm: {message}")
         print("="*60 + "\n")
         
