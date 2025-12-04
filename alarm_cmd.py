@@ -142,12 +142,9 @@ def main():
         )
 
 
-        # Play buzzer/beep sound for 5 seconds after notification
-        from scheduler.notifications import play_notification_sound
-        import time as time_mod
-        for _ in range(5):
-            play_notification_sound("beep")
-            time_mod.sleep(1)
+        # Play alarm clock buzzer sound for 5 seconds after notification
+        from scheduler.notifications import play_alarm_sound
+        play_alarm_sound(duration=5)
 
         print(f"\n✓ Alarm: {message}")
         print("="*60 + "\n")
