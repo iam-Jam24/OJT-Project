@@ -20,7 +20,8 @@ except (ImportError, ModuleNotFoundError):
 
 # Available system sounds on macOS
 MACOS_SOUNDS = {
-    "alarm": "/System/Library/Sounds/Ping.aiff",
+    "alarm": "/System/Library/Sounds/Sosumi.aiff",  # Loud buzzer
+    "buzzer": "/System/Library/Sounds/Basso.aiff",  # Extra buzzer
     "bell": "/System/Library/Sounds/Glass.aiff",
     "notification": "/System/Library/Sounds/Ping.aiff",
     "alert": "/System/Library/Sounds/Sosumi.aiff",
@@ -40,8 +41,18 @@ def play_notification_sound(sound_type="notification"):
     try:
         if sys.platform == "darwin":  # macOS
             sound_file = MACOS_SOUNDS.get(sound_type, MACOS_SOUNDS["notification"])
-            # Play sound in background
-            os.system(f"afplay {sound_file} > /dev/null 2>&1 &")
+            # Play loud buzzer effect for alarm
+            if sound_type == "alarm":
+                import time as time_mod
+                for _ in range(6):
+                    os.system(f"afplay {sound_file} > /dev/null 2>&1 &")
+                    time_mod.sleep(0.2)
+                # Also play Basso for extra buzzer
+                for _ in range(2):
+                    os.system(f"afplay {MACOS_SOUNDS['buzzer']} > /dev/null 2>&1 &")
+                    time_mod.sleep(0.2)
+            else:
+                os.system(f"afplay {sound_file} > /dev/null 2>&1 &")
         elif sys.platform == "win32":  # Windows
             import winsound
             # Play default Windows sound
@@ -62,11 +73,14 @@ def play_alarm_sound(duration=3):
     """
     try:
         if sys.platform == "darwin":  # macOS
-            # Play alarm sound multiple times
-            for _ in range(2):
-                os.system("afplay /System/Library/Sounds/Alarm.aiff > /dev/null 2>&1")
-                import time as time_mod
-                time_mod.sleep(0.5)
+            # Play loud buzzer effect by repeating Sosumi and Basso
+            import time as time_mod
+            for _ in range(duration * 2):
+                os.system("afplay /System/Library/Sounds/Sosumi.aiff > /dev/null 2>&1")
+                time_mod.sleep(0.2)
+            for _ in range(duration):
+                os.system("afplay /System/Library/Sounds/Basso.aiff > /dev/null 2>&1")
+                time_mod.sleep(0.2)
         elif sys.platform == "win32":  # Windows
             # Use Windows beep
             import winsound
@@ -88,7 +102,13 @@ def show_popup_notification(title, message, timeout=10):
         timeout (int): Timeout in seconds (default 10)
     """
     try:
-        if notification:
+        if sys.platform == "darwin":
+            # Always use osascript for macOS notification popups
+            safe_message = message.replace('"', '\"')
+            safe_title = title.replace('"', '\"')
+            script = f'display notification "{safe_message}" with title "{safe_title}"'
+            os.system(f"osascript -e '{script}' &")
+        elif notification:
             notification.notify(
                 title=title,
                 message=message,
@@ -99,7 +119,7 @@ def show_popup_notification(title, message, timeout=10):
             print(f"\n🔔 {title}")
             print(f"   {message}")
     except Exception as e:
-        # Silently fail for plyer notification - it's optional
+        # Silently fail for notification popup
         pass
 
 

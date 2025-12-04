@@ -118,4 +118,34 @@ Scheduler started...
 ▶ Running job: daily_backup
 ⏰ JOB ALERT: daily_backup
 [Alarm sound plays]
+[Notification popup appears]
+
+## 🖥️ Notification Popups
+
+You can display a notification popup when an alarm or job event occurs. On macOS, use either `osascript` or the `plyer` library:
+
+### Using osascript (macOS)
+
+Add this to your Python code:
+
+```python
+import os
+def show_popup_notification(title, message):
+   os.system(f'''osascript -e 'display notification "{message}" with title "{title}"' ''')
+```
+
+### Using plyer (cross-platform)
+
+Install plyer:
+```sh
+pip install plyer
+```
+
+Add this to your Python code:
+```python
+from plyer import notification
+notification.notify(title="Alarm", message="Time's up!", app_name="Scheduler")
+```
+
+Both methods will show a notification popup when the alarm rings or a job event occurs.
 ```
