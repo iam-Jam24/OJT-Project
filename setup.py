@@ -15,7 +15,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/scheduler-alarms/scheduler-alarms-cli",
-    packages=find_packages(),
+    packages=find_packages(exclude=["*__pycache__*"]),
+    py_modules=["cli", "simple_alarm", "alarm_cmd"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

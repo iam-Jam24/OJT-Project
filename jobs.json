@@ -6,7 +6,7 @@
             "frequency": "interval",
             "seconds": 2
         },
-        "next_run": "2025-12-02T08:14:55.459498",
+        "next_run": "2025-12-02T08:15:07.459498",
         "running": false
     },
     {
@@ -34,7 +34,7 @@
             "frequency": "hourly",
             "time": "2025-12-01T12:30:00"
         },
-        "next_run": "2025-12-01T21:30:00",
+        "next_run": "2025-12-02T03:30:00",
         "running": false
     },
     {
@@ -44,7 +44,7 @@
             "frequency": "interval",
             "seconds": 4
         },
-        "next_run": "2025-12-05T14:42:10.536981",
+        "next_run": "2025-12-05T14:42:34.536981",
         "running": false
     },
     {
@@ -54,7 +54,7 @@
             "frequency": "interval",
             "seconds": 30
         },
-        "next_run": "2025-12-05T14:43:39.980139",
+        "next_run": "2025-12-05T14:46:39.980139",
         "running": false
     }
 ]
